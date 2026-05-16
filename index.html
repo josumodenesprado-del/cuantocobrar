@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CuantoCobrar — ¿Estás cobrando bien?</title>
+  <title>CuantoCobrarPro — ¿Estás cobrando bien?</title>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -491,7 +491,7 @@
       <div class="wrapped-card" id="wrappedCard">
         <div class="wrapped-inner">
           <div class="wrapped-header">
-            <span class="logo-text">CuantoCobrar</span>
+            <span class="logo-text">CuantoCobrarPro</span>
             <span class="year">2026</span>
           </div>
           <div class="wrapped-label">Mi tarifa freelance</div>
@@ -502,7 +502,7 @@
           <div class="wrapped-quote">
             <span id="wrappedQuote">"Mi tarifa como <em>Desarrollador Web</em> en <em>Madrid</em> está en el <span class="highlight">Top 15%</span> del mercado. ¿Y la tuya?"</span>
           </div>
-          <div class="wrapped-footer-text">CuantoCobrar — cuantocobrar.com</div>
+          <div class="wrapped-footer-text">CuantoCobrarPro — cuantocobrarpro.com</div>
         </div>
       </div>
 
@@ -581,7 +581,7 @@
   </section>
 
   <footer class="footer">
-    <strong>CuantoCobrar</strong> &mdash; Tarifas de mercado para freelancers en Latinoamérica y España &copy; 2026
+    <strong>CuantoCobrarPro</strong> &mdash; Tarifas de mercado para freelancers en Latinoamérica y España &copy; 2026
   </footer>
 
   <script>
@@ -1101,26 +1101,26 @@
       const m = prof.match(/<em>([^<]+)<\/em>/g);
       const p = m ? m[0].replace(/<\/?em>/g,'') : '';
       const c = m && m[1] ? m[1].replace(/<\/?em>/g,'') : '';
-      return 'Mi tarifa como ' + p + ' en ' + c + ' está en el Top ' + pct + ' del mercado. Descubre la tuya en CuantoCobrar';
+      return 'Mi tarifa como ' + p + ' en ' + c + ' está en el Top ' + pct + ' del mercado. Descubre la tuya en CuantoCobrarPro';
     }
 
     document.getElementById('shareTwitter').addEventListener('click', function() {
       const text = getShareText();
-      window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text + '\n\ncuantocobrar.com'), '_blank');
+      window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text + '\n\ncuantocobrarpro.com'), '_blank');
     });
 
     document.getElementById('shareLinkedin').addEventListener('click', function() {
       const text = getShareText();
-      window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent('https://cuantocobrar.com') + '&text=' + encodeURIComponent(text), '_blank');
+      window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent('https://cuantocobrarpro.com') + '&text=' + encodeURIComponent(text), '_blank');
     });
 
     document.getElementById('shareWhatsapp').addEventListener('click', function() {
       const text = getShareText();
-      window.open('https://wa.me/?text=' + encodeURIComponent(text + '\n\ncuantocobrar.com'), '_blank');
+      window.open('https://wa.me/?text=' + encodeURIComponent(text + '\n\ncuantocobrarpro.com'), '_blank');
     });
 
     document.getElementById('shareCopy').addEventListener('click', function() {
-      const text = getShareText() + '\n\ncuantocobrar.com';
+      const text = getShareText() + '\n\ncuantocobrarpro.com';
       navigator.clipboard.writeText(text).then(() => {
         const btn = document.getElementById('shareCopy');
         const orig = btn.innerHTML;
