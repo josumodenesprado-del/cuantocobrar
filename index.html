@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CuantoCobrar — ¿Estás cobrando bien?</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #FFFFFF;
+      color: #1A1A1A;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: #0D1B2A; color: #fff; padding: 18px 28px;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+    }
+    .header-inner { max-width: 1040px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-size: 26px; font-weight: 800; letter-spacing: -0.8px; }
+    .logo span { color: #00C853; }
+    .header-badge {
+      background: rgba(0,200,83,0.15); color: #00C853; font-size: 12px; font-weight: 700;
+      padding: 5px 14px; border-radius: 999px; border: 1px solid rgba(0,200,83,0.3);
+      letter-spacing: 0.3px;
+    }
+
+    .hero {
+      background: linear-gradient(160deg, #0D1B2A 0%, #1a2f45 100%);
+      color: #fff; padding: 90px 28px 80px; text-align: center; position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 100%, rgba(0,200,83,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -20%; left: -10%; width: 500px; height: 500px;
+      border-radius: 50%; background: radial-gradient(circle, rgba(0,200,83,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
+    .hero-tag {
+      display: inline-block; background: rgba(0,200,83,0.12); color: #00C853;
+      font-size: 14px; font-weight: 700; padding: 6px 18px; border-radius: 999px;
+      margin-bottom: 28px; border: 1px solid rgba(0,200,83,0.25);
+      letter-spacing: 0.3px;
+    }
+    .hero h1 { font-size: 48px; font-weight: 900; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 20px; }
+    .hero h1 em { font-style: normal; color: #00C853; }
+    .hero p { font-size: 19px; color: #94a3b8; max-width: 540px; margin: 0 auto; }
+
+    .section { max-width: 1040px; margin: 0 auto; padding: 80px 28px; }
+    .section-title { font-size: 32px; font-weight: 800; text-align: center; margin-bottom: 8px; letter-spacing: -0.5px; color: #1A1A1A; }
+    .section-sub { text-align: center; color: #6B7280; margin-bottom: 48px; font-size: 17px; }
+
+    .form-card {
+      max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;
+    }
+
+    .step-card {
+      background: #FFFFFF; border-radius: 16px; padding: 24px 28px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.05);
+      transition: box-shadow 0.25s, border-color 0.25s;
+      border: 1.5px solid #E5E7EB;
+    }
+    .step-card:focus-within {
+      border-color: #00C853;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.05), 0 0 0 4px rgba(0,200,83,0.08);
+    }
+
+    .step-header {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
+    }
+    .step-number {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 10px;
+      background: #0D1B2A; color: #00C853;
+      font-size: 16px; font-weight: 800; flex-shrink: 0;
+    }
+    .step-header-text { display: flex; flex-direction: column; }
+    .step-label {
+      font-size: 12px; font-weight: 700; color: #00C853;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .step-title {
+      font-size: 15px; font-weight: 600; color: #1A1A1A;
+    }
+
+    .form-group { margin: 0; }
+    .form-group select {
+      width: 100%; padding: 14px 18px; font-size: 16px; font-family: inherit;
+      border: 1.5px solid #E5E7EB; border-radius: 10px; background: #fff; color: #1A1A1A;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 16px center; padding-right: 44px;
+    }
+    .form-group select:focus { outline: none; border-color: #00C853; box-shadow: 0 0 0 3px rgba(0,200,83,0.12); }
+    .form-group select:hover { border-color: #9CA3AF; }
+    .form-group select:disabled { background-color: #F9FAFB; color: #9CA3AF; cursor: not-allowed; }
+
+    .btn {
+      width: 100%; padding: 18px; font-size: 18px; font-weight: 700; font-family: inherit;
+      border: none; border-radius: 14px; cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.25s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #00C853 0%, #009624 100%);
+      color: #fff; box-shadow: 0 6px 24px rgba(0,200,83,0.35);
+    }
+    .btn-primary:hover { box-shadow: 0 8px 32px rgba(0,200,83,0.45); transform: translateY(-1px); }
+    .btn-primary:active { transform: scale(0.97); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-outline {
+      background: transparent; color: #4B5563; border: 1.5px solid #E5E7EB;
+      font-size: 14px; padding: 10px 18px; width: auto; display: inline-flex; align-items: center; gap: 6px; border-radius: 10px; transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-outline:hover { background: #F9FAFB; border-color: #D1D5DB; }
+    .btn-twitter { background: #1da1f2; color: #fff; border-color: #1da1f2; }
+    .btn-twitter:hover { background: #1a8cd8; }
+    .btn-linkedin { background: #0a66c2; color: #fff; border-color: #0a66c2; }
+    .btn-linkedin:hover { background: #09569e; }
+    .btn-whatsapp { background: #25d366; color: #fff; border-color: #25d366; }
+    .btn-whatsapp:hover { background: #1ebe5d; }
+    .form-note { text-align: center; font-size: 13px; color: #9CA3AF; margin-top: 12px; }
+
+    .result-section { max-width: 1040px; margin: 0 auto; padding: 0 28px 80px; }
+    .result-wrap { display: none; }
+    .result-wrap.visible { display: block; animation: resultIn 0.6s ease-out; }
+    @keyframes resultIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    .result-card {
+      background: #fff; border-radius: 24px; padding: 52px 44px 44px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03), 0 16px 56px rgba(0,0,0,0.08);
+      max-width: 580px; margin: 0 auto 36px; text-align: center; position: relative; overflow: hidden;
+    }
+    .result-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; }
+    .result-card.verdict-good::before { background: #00C853; }
+    .result-card.verdict-mid::before { background: #F59E0B; }
+    .result-card.verdict-low::before { background: #EF4444; }
+
+    .result-verdict-icon { font-size: 48px; margin-bottom: 8px; line-height: 1; }
+
+    .result-badge {
+      display: inline-flex; align-items: center; gap: 8px; padding: 10px 24px;
+      border-radius: 999px; font-size: 18px; font-weight: 800; margin-bottom: 28px; letter-spacing: -0.3px;
+    }
+    .result-badge.good { background: #E8F5E9; color: #009624; }
+    .result-badge.mid { background: #FFF3E0; color: #E65100; }
+    .result-badge.low { background: #FFEBEE; color: #C62828; }
+
+    .rate-row {
+      display: flex; justify-content: center; gap: 14px; margin-bottom: 32px; flex-wrap: wrap;
+    }
+    .rate-item {
+      flex: 1; min-width: 130px; max-width: 170px;
+      background: #F9FAFB; border-radius: 16px; padding: 22px 10px 16px;
+      border: 1px solid #F3F4F6;
+    }
+    .rate-item .rate-value { font-size: 32px; font-weight: 900; letter-spacing: -1px; color: #0D1B2A; line-height: 1.2; }
+    .rate-item .rate-unit { font-size: 13px; color: #6B7280; font-weight: 500; margin-top: 4px; }
+    .rate-item .rate-curr { font-size: 18px; font-weight: 700; color: #6B7280; }
+
+    .result-range-box {
+      background: #F9FAFB; border-radius: 14px; padding: 18px 28px; margin-bottom: 24px;
+      border: 1px solid #F3F4F6;
+    }
+    .result-range-box p { font-size: 14px; color: #6B7280; font-weight: 500; margin-bottom: 4px; }
+    .result-range-box .range { font-size: 22px; font-weight: 800; color: #1A1A1A; letter-spacing: -0.3px; }
+
+    .top-percentile {
+      background: #E8F5E9; border-radius: 14px; padding: 16px 24px;
+      display: inline-flex; align-items: center; gap: 12px; font-size: 16px; font-weight: 700; color: #009624;
+    }
+    .top-percentile .big { font-size: 28px; }
+
+    .net-salary {
+      background: linear-gradient(145deg, #0D1B2A 0%, #1a2f45 100%);
+      border-radius: 16px; padding: 28px 32px 24px; text-align: left; color: #fff;
+      max-width: 580px; margin: 0 auto 36px;
+      box-shadow: 0 8px 32px rgba(13,27,42,0.15);
+    }
+    .net-salary h3 {
+      font-size: 15px; font-weight: 700; color: #9CA3AF; text-transform: uppercase;
+      letter-spacing: 1.5px; margin-bottom: 16px; text-align: center;
+    }
+    .net-salary table { width: 100%; border-collapse: collapse; }
+    .net-salary td { padding: 8px 0; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .net-salary td:last-child { text-align: right; font-weight: 600; }
+    .net-salary .label { color: #9CA3AF; }
+    .net-salary .value { color: #E5E7EB; }
+    .net-salary .total td { border-bottom: none; padding-top: 12px; font-size: 16px; }
+    .net-salary .total .label { color: #00C853; font-weight: 700; }
+    .net-salary .total .value { color: #00C853; font-size: 22px; font-weight: 900; }
+    .net-salary .deduct { color: #FCA5A5; }
+
+    .wrapped-card {
+      max-width: 520px; margin: 0 auto 36px; border-radius: 24px; overflow: hidden;
+      box-shadow: 0 12px 56px rgba(0,0,0,0.2);
+    }
+    .wrapped-inner {
+      background: linear-gradient(150deg, #001a0e 0%, #000000 100%);
+      padding: 48px 36px 40px; text-align: center; color: #fff; position: relative;
+    }
+    .wrapped-inner::before {
+      content: ''; position: absolute; top: -50%; right: -30%;
+      width: 400px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,200,83,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .wrapped-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 32px; position: relative; z-index: 1;
+    }
+    .wrapped-header .logo-text { font-size: 16px; font-weight: 800; color: #00C853; letter-spacing: -0.3px; letter-spacing: 0.5px; }
+    .wrapped-header .year { font-size: 13px; color: #00C853; font-weight: 700; opacity: 0.7; }
+    .wrapped-label {
+      font-size: 12px; text-transform: uppercase; letter-spacing: 4px; color: #00C853; font-weight: 700;
+      margin-bottom: 24px; position: relative; z-index: 1; opacity: 0.8;
+    }
+    .wrapped-rate {
+      font-size: 72px; font-weight: 900; letter-spacing: -4px; line-height: 1;
+      margin-bottom: 6px; position: relative; z-index: 1;
+    }
+    .wrapped-rate-sub {
+      font-size: 15px; color: #6EE7B7; font-weight: 500; margin-bottom: 24px; position: relative; z-index: 1; opacity: 0.8;
+    }
+    .wrapped-divider {
+      width: 48px; height: 3px; background: #00C853; border-radius: 4px;
+      margin: 0 auto 24px; position: relative; z-index: 1;
+    }
+    .wrapped-top {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0,200,83,0.12); padding: 8px 22px; border-radius: 999px;
+      font-size: 22px; font-weight: 900; color: #00C853; margin-bottom: 24px;
+      position: relative; z-index: 1; border: 1px solid rgba(0,200,83,0.2);
+    }
+    .wrapped-top small { font-size: 15px; font-weight: 600; color: #6EE7B7; }
+    .wrapped-quote {
+      font-size: 20px; line-height: 1.5; color: #D1D5DB; margin-bottom: 28px;
+      font-weight: 500; position: relative; z-index: 1;
+    }
+    .wrapped-quote em { font-style: normal; color: #fff; font-weight: 700; }
+    .wrapped-quote .highlight { color: #00C853; }
+    .wrapped-footer-text {
+      font-size: 13px; color: #6EE7B7; font-weight: 600; letter-spacing: 0.5px;
+      position: relative; z-index: 1; opacity: 0.6;
+    }
+
+    .social-row {
+      display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .premium-section { max-width: 620px; margin: 0 auto; text-align: center; }
+    .premium-card {
+      background: linear-gradient(135deg, #FEFCE8 0%, #fff 100%);
+      border: 2px solid #FDE68A; border-radius: 24px; padding: 48px 40px;
+      margin-bottom: 0; position: relative; overflow: hidden;
+    }
+    .premium-card.locked::after {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(255,255,255,0.45); backdrop-filter: blur(3px);
+      border-radius: 24px; z-index: 2;
+    }
+    .premium-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #F59E0B; color: #fff; padding: 6px 16px; border-radius: 999px;
+      font-size: 13px; font-weight: 700; margin-bottom: 20px;
+    }
+    .premium-card h3 { font-size: 28px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
+    .premium-card .sub { color: #6B7280; font-size: 15px; margin-bottom: 32px; }
+    .premium-price {
+      display: inline-block; font-size: 42px; font-weight: 900; color: #0D1B2A;
+      margin-bottom: 8px;
+    }
+    .premium-price small { font-size: 18px; font-weight: 600; color: #6B7280; }
+    .premium-features {
+      text-align: left; margin: 28px 0 32px; list-style: none;
+    }
+    .premium-features li {
+      padding: 12px 0; border-bottom: 1px solid #FEF3C7;
+      display: flex; align-items: center; gap: 12px; font-size: 15px; color: #374151;
+    }
+    .premium-features li:last-child { border-bottom: none; }
+    .premium-features .icon { font-size: 20px; }
+    .premium-content { display: none; margin-top: 36px; }
+    .premium-content.visible { display: block; }
+
+    .percentile-chart { margin: 24px 0; }
+    .percentile-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .percentile-row .p-label { width: 50px; font-size: 14px; font-weight: 600; color: #6B7280; text-align: right; }
+    .percentile-row .p-bar {
+      flex: 1; height: 24px; background: #F3F4F6; border-radius: 6px; position: relative; overflow: hidden;
+    }
+    .percentile-row .p-fill { height: 100%; border-radius: 6px; background: #E5E7EB; transition: width 0.6s ease-out; }
+    .percentile-row .p-value { width: 65px; font-size: 14px; font-weight: 700; color: #1A1A1A; }
+    .percentile-row.highlight .p-label { color: #00C853; }
+    .percentile-row.highlight .p-fill { background: #00C853; }
+    .percentile-row.highlight .p-value { color: #00C853; }
+
+    .city-compare { margin: 20px 0; }
+    .city-compare table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .city-compare th, .city-compare td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #F3F4F6; }
+    .city-compare th { font-size: 12px; color: #6B7280; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .city-compare .highlight-row td { color: #00C853; font-weight: 700; background: #E8F5E9; }
+
+    .budget-template {
+      background: #F9FAFB; border-radius: 14px; padding: 28px; margin: 20px 0; text-align: left;
+    }
+    .budget-template h4 { font-size: 15px; font-weight: 700; margin-bottom: 14px; color: #1A1A1A; }
+    .budget-template table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .budget-template td { padding: 8px 10px; border-bottom: 1px solid #E5E7EB; }
+    .budget-template td:last-child { text-align: right; font-weight: 600; }
+    .budget-template .section td { font-weight: 700; color: #374151; background: #F3F4F6; border-bottom: none; }
+    .budget-template .total td { font-weight: 800; color: #00C853; border-bottom: none; font-size: 15px; }
+
+    .purchase-feedback {
+      display: none; margin-top: 24px;
+      background: #E8F5E9; border: 1px solid #A5D6A7; border-radius: 14px;
+      padding: 24px 28px; text-align: center;
+    }
+    .purchase-feedback.visible { display: block; }
+    .purchase-feedback h4 { color: #009624; font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+    .purchase-feedback p { color: #6B7280; font-size: 14px; }
+
+    .footer {
+      background: #0D1B2A; color: #6B7280; text-align: center;
+      padding: 40px 28px; font-size: 14px;
+    }
+    .footer strong { color: #E5E7EB; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 60px 20px 52px; }
+      .hero h1 { font-size: 30px; }
+      .hero p { font-size: 16px; }
+      .section { padding: 56px 16px; }
+      .section-title { font-size: 24px; }
+      .form-card { gap: 16px; }
+      .step-card { padding: 18px 18px; }
+      .result-card { padding: 36px 20px 28px; }
+      .rate-item .rate-value { font-size: 24px; }
+      .rate-item { min-width: 90px; padding: 16px 6px 12px; }
+      .rate-row { gap: 8px; }
+      .result-range-box .range { font-size: 18px; }
+      .wrapped-inner { padding: 32px 20px 28px; }
+      .wrapped-rate { font-size: 48px; }
+      .wrapped-quote { font-size: 16px; }
+      .net-salary { padding: 20px; }
+      .premium-card { padding: 28px 20px; }
+      .premium-card h3 { font-size: 22px; }
+      .premium-price { font-size: 32px; }
+      .social-row .btn-outline { font-size: 13px; padding: 8px 14px; }
+      .step-number { width: 30px; height: 30px; font-size: 14px; }
+      .result-verdict-icon { font-size: 36px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">Cuanto<span>Cobrar</span></div>
+      <span class="header-badge">Beta</span>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="hero-tag">Para freelancers, por freelancers</span>
+      <h1>¿Estás cobrando <em>bien</em> o <em>barato</em>?</h1>
+      <p>Descubre si tu tarifa está alineada con el mercado de tu país. En menos de 10 segundos.</p>
+    </div>
+  </section>
+
+  <section class="section" id="calculadora">
+    <h2 class="section-title">Consulta tu tarifa</h2>
+    <p class="section-sub">Completa los 4 pasos y obtén un veredicto instantáneo</p>
+
+    <div class="form-card">
+      <form id="rateForm" novalidate>
+
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-number">1</div>
+            <div class="step-header-text">
+              <span class="step-label">Paso 1</span>
+              <span class="step-title">¿En qué país trabajas?</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <select id="pais" name="pais" required>
+              <option value="" disabled selected>Selecciona tu país</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-number">2</div>
+            <div class="step-header-text">
+              <span class="step-label">Paso 2</span>
+              <span class="step-title">¿En qué ciudad estás?</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <select id="ciudad" name="ciudad" required disabled>
+              <option value="" disabled selected>Primero selecciona un país</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-number">3</div>
+            <div class="step-header-text">
+              <span class="step-label">Paso 3</span>
+              <span class="step-title">¿Cuál es tu profesión?</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <select id="profesion" name="profesion" required>
+              <option value="" disabled selected>Selecciona tu profesión</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-number">4</div>
+            <div class="step-header-text">
+              <span class="step-label">Paso 4</span>
+              <span class="step-title">¿Cuántos años de experiencia tienes?</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <select id="experiencia" name="experiencia" required>
+              <option value="" disabled selected>Selecciona tu experiencia</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Descubre cuánto deberías cobrar</button>
+      </form>
+      <p class="form-note">Resultados basados en datos de mercado actualizados.</p>
+    </div>
+  </section>
+
+  <section class="result-section" id="resultados">
+    <div class="result-wrap" id="resultWrap">
+
+      <div class="result-card" id="resultCard">
+        <div class="result-verdict-icon" id="verdictIcon"></div>
+        <div class="result-badge" id="resultBadge"></div>
+        <div class="rate-row">
+          <div class="rate-item"><div class="rate-value"><span id="rateHour">35</span><span class="rate-curr" id="rateCurrH">€</span></div><div class="rate-unit">por hora</div></div>
+          <div class="rate-item"><div class="rate-value"><span id="rateDay">280</span><span class="rate-curr" id="rateCurrD">€</span></div><div class="rate-unit">por día (8h)</div></div>
+          <div class="rate-item"><div class="rate-value"><span id="rateMonth">5.600</span><span class="rate-curr" id="rateCurrM">€</span></div><div class="rate-unit">al mes (160h)</div></div>
+        </div>
+        <div class="result-range-box">
+          <p>Tu rango recomendado</p>
+          <div class="range" id="resultRange"></div>
+        </div>
+        <div class="top-percentile" id="topPercentile">
+          <span class="big" id="topNumber">Top 50%</span>
+          <span id="topMessage">del mercado para tu perfil</span>
+        </div>
+      </div>
+
+      <div class="net-salary" id="netSalary">
+        <h3>Sueldo neto estimado</h3>
+        <table>
+          <tr><td class="label">Ingreso bruto mensual</td><td class="value" id="netGross">0€</td></tr>
+          <tr><td class="label">− IRPF / Impuesto a la renta</td><td class="value deduct" id="netTax">−0€</td></tr>
+          <tr><td class="label">− Cuota de autónomos / seguridad social</td><td class="value deduct" id="netSS">−0€</td></tr>
+          <tr><td class="label">− Gastos fijos estimados</td><td class="value deduct" id="netExpenses">−0€</td></tr>
+          <tr class="total"><td class="label">Neto mensual</td><td class="value" id="netTotal">0€</td></tr>
+        </table>
+      </div>
+
+      <div style="max-width:560px;margin:0 auto 32px;text-align:center;font-size:12px;color:#94a3b8;line-height:1.5;">
+        Datos basados en estudios de mercado 2025-2026 de Malt, Talent.com y Glassdoor.<br>
+        Se actualizan con tarifas reales aportadas por la comunidad de forma anónima.
+      </div>
+
+      <div class="wrapped-card" id="wrappedCard">
+        <div class="wrapped-inner">
+          <div class="wrapped-header">
+            <span class="logo-text">CuantoCobrar</span>
+            <span class="year">2026</span>
+          </div>
+          <div class="wrapped-label">Mi tarifa freelance</div>
+          <div class="wrapped-rate" id="wrappedRate">42€/h</div>
+          <div class="wrapped-rate-sub" id="wrappedRateSub">tarifa del mercado</div>
+          <div class="wrapped-divider"></div>
+          <div class="wrapped-top" id="wrappedTop">Top <span id="wrappedTopValue">15%</span> <small>del mercado</small></div>
+          <div class="wrapped-quote">
+            <span id="wrappedQuote">"Mi tarifa como <em>Desarrollador Web</em> en <em>Madrid</em> está en el <span class="highlight">Top 15%</span> del mercado. ¿Y la tuya?"</span>
+          </div>
+          <div class="wrapped-footer-text">CuantoCobrar — cuantocobrar.com</div>
+        </div>
+      </div>
+
+      <div class="social-row" id="socialRow">
+        <button class="btn-outline btn-twitter" id="shareTwitter">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          Twitter / X
+        </button>
+        <button class="btn-outline btn-linkedin" id="shareLinkedin">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </button>
+        <button class="btn-outline btn-whatsapp" id="shareWhatsapp">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </button>
+        <button class="btn-outline" id="shareCopy">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copiar
+        </button>
+      </div>
+
+      <div class="premium-section" id="premiumSection">
+        <div class="premium-card locked" id="premiumCard">
+          <div class="premium-badge">&#9733; Informe completo</div>
+          <h3>Desbloquea tu informe completo</h3>
+          <p class="sub">Obtén datos detallados para negociar mejores tarifas</p>
+
+          <div class="premium-price">9€ <small>único pago</small></div>
+
+          <ul class="premium-features">
+            <li><span class="icon">&#9878;</span> Desglose completo por percentiles del mercado</li>
+            <li><span class="icon">&#127758;</span> Comparativa detallada con otras ciudades</li>
+            <li><span class="icon">&#128178;</span> Tarifa local vs. tarifa exportando en USD — para LATAM</li>
+            <li><span class="icon">&#128203;</span> Plantilla profesional de presupuesto</li>
+          </ul>
+
+          <button class="btn btn-primary" id="purchaseBtn">Comprar informe completo — 9€</button>
+
+          <div class="purchase-feedback" id="purchaseFeedback">
+            <h4>&#10003; ¡Informe desbloqueado!</h4>
+            <p>Gracias por tu compra. Esta es una versión demo — el contenido completo estará disponible próximamente.</p>
+          </div>
+
+          <div class="premium-content" id="premiumContent">
+
+            <div class="premium-section-title" style="margin-bottom:16px;">
+              <h4 style="font-size:15px;font-weight:700;color:#334155;margin-bottom:4px;">Distribución del mercado</h4>
+              <p style="font-size:13px;color:#64748b;">Percentiles de tarifa para tu profesión</p>
+            </div>
+            <div class="percentile-chart" id="percentileChart"></div>
+
+            <div style="margin:28px 0 16px;">
+              <h4 style="font-size:15px;font-weight:700;color:#334155;margin-bottom:4px;">Comparativa por ciudades</h4>
+              <p style="font-size:13px;color:#64748b;">Cómo se comporta tu tarifa en otras ciudades</p>
+            </div>
+            <div class="city-compare" id="cityCompare"></div>
+
+            <div style="margin:28px 0 16px;" id="latamSection">
+              <h4 style="font-size:15px;font-weight:700;color:#334155;margin-bottom:4px;">Exporta tu trabajo</h4>
+              <p style="font-size:13px;color:#64748b;">Tarifa local vs. tarifa internacional en USD</p>
+            </div>
+            <div class="city-compare" id="latamCompare"></div>
+
+            <div style="margin:28px 0 0;">
+              <h4 style="font-size:15px;font-weight:700;color:#334155;margin-bottom:4px;">Plantilla de presupuesto</h4>
+              <p style="font-size:13px;color:#64748b;">Ejemplo de presupuesto mensual para tu perfil</p>
+            </div>
+            <div class="budget-template" id="budgetTemplate"></div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <strong>CuantoCobrar</strong> &mdash; Tarifas de mercado para freelancers en Latinoamérica y España &copy; 2026
+  </footer>
+
+  <script>
+    // ── TARIFAS: Diseñador Gráfico (base) ──
+
+    const TARIFAS_BASE = {
+      "Diseñador Gráfico": {
+        "España": {
+          "Madrid": { factor:1.15, junior:25, medio:40, senior:60, moneda:"EUR" },
+          "Barcelona": { factor:1.20, junior:25, medio:40, senior:60, moneda:"EUR" },
+          "Valencia": { factor:1.05, junior:25, medio:35, senior:55, moneda:"EUR" },
+          "Sevilla": { factor:1.02, junior:20, medio:35, senior:55, moneda:"EUR" },
+          "Zaragoza": { factor:1.00, junior:20, medio:35, senior:50, moneda:"EUR" },
+          "Málaga": { factor:1.08, junior:25, medio:40, senior:55, moneda:"EUR" },
+          "Murcia": { factor:0.95, junior:20, medio:35, senior:50, moneda:"EUR" },
+          "Palma": { factor:1.12, junior:25, medio:40, senior:60, moneda:"EUR" },
+          "Las Palmas": { factor:1.00, junior:20, medio:35, senior:50, moneda:"EUR" },
+          "Bilbao": { factor:1.10, junior:25, medio:40, senior:55, moneda:"EUR" },
+          "Alicante": { factor:1.02, junior:20, medio:35, senior:55, moneda:"EUR" },
+          "Córdoba": { factor:0.95, junior:20, medio:35, senior:50, moneda:"EUR" },
+          "Valladolid": { factor:0.98, junior:20, medio:35, senior:50, moneda:"EUR" },
+          "Vigo": { factor:0.97, junior:20, medio:35, senior:50, moneda:"EUR" },
+          "Gijón": { factor:0.96, junior:20, medio:35, senior:50, moneda:"EUR" },
+          "Hospitalet": { factor:1.18, junior:25, medio:40, senior:60, moneda:"EUR" },
+          "A Coruña": { factor:0.98, junior:20, medio:35, senior:50, moneda:"EUR" },
+          "Vitoria": { factor:1.05, junior:25, medio:35, senior:55, moneda:"EUR" },
+          "Granada": { factor:1.00, junior:20, medio:35, senior:50, moneda:"EUR" },
+          "Elche": { factor:0.97, junior:20, medio:35, senior:50, moneda:"EUR" },
+          "Oviedo": { factor:0.97, junior:20, medio:35, senior:50, moneda:"EUR" },
+          "Badalona": { factor:1.18, junior:25, medio:40, senior:60, moneda:"EUR" },
+          "Cartagena": { factor:0.96, junior:20, medio:35, senior:50, moneda:"EUR" },
+          "Terrassa": { factor:1.12, junior:25, medio:40, senior:60, moneda:"EUR" },
+          "Jerez": { factor:0.95, junior:20, medio:35, senior:50, moneda:"EUR" },
+          "Sabadell": { factor:1.15, junior:25, medio:40, senior:60, moneda:"EUR" }
+        },
+        "México": {
+          "Ciudad de México": { factor:1.05, junior:15, medio:25, senior:40, moneda:"USD" },
+          "Guadalajara": { factor:0.95, junior:12, medio:22, senior:35, moneda:"USD" },
+          "Monterrey": { factor:0.98, junior:13, medio:23, senior:37, moneda:"USD" },
+          "Puebla": { factor:0.90, junior:11, medio:20, senior:33, moneda:"USD" },
+          "Tijuana": { factor:0.93, junior:12, medio:22, senior:35, moneda:"USD" },
+          "León": { factor:0.88, junior:11, medio:19, senior:32, moneda:"USD" },
+          "Juárez": { factor:0.90, junior:11, medio:20, senior:33, moneda:"USD" },
+          "Torreón": { factor:0.87, junior:10, medio:18, senior:30, moneda:"USD" },
+          "San Luis Potosí": { factor:0.88, junior:11, medio:19, senior:32, moneda:"USD" },
+          "Mérida": { factor:0.90, junior:11, medio:20, senior:33, moneda:"USD" }
+        },
+        "Argentina": {
+          "Buenos Aires": { factor:0.85, junior:12, medio:20, senior:35, moneda:"USD" },
+          "Córdoba": { factor:0.78, junior:10, medio:18, senior:30, moneda:"USD" },
+          "Rosario": { factor:0.77, junior:10, medio:17, senior:29, moneda:"USD" },
+          "Mendoza": { factor:0.75, junior:9, medio:16, senior:28, moneda:"USD" },
+          "La Plata": { factor:0.80, junior:11, medio:18, senior:31, moneda:"USD" },
+          "Tucumán": { factor:0.73, junior:9, medio:15, senior:27, moneda:"USD" },
+          "Mar del Plata": { factor:0.76, junior:10, medio:17, senior:29, moneda:"USD" },
+          "Salta": { factor:0.72, junior:9, medio:15, senior:26, moneda:"USD" },
+          "Santa Fe": { factor:0.75, junior:9, medio:16, senior:28, moneda:"USD" },
+          "San Juan": { factor:0.71, junior:8, medio:14, senior:25, moneda:"USD" }
+        },
+        "Colombia": {
+          "Bogotá": { factor:1.00, junior:12, medio:22, senior:38, moneda:"USD" },
+          "Medellín": { factor:0.92, junior:11, medio:20, senior:35, moneda:"USD" },
+          "Cali": { factor:0.88, junior:10, medio:18, senior:32, moneda:"USD" },
+          "Barranquilla": { factor:0.85, junior:10, medio:17, senior:30, moneda:"USD" },
+          "Cartagena": { factor:0.87, junior:10, medio:18, senior:31, moneda:"USD" },
+          "Cúcuta": { factor:0.80, junior:9, medio:16, senior:28, moneda:"USD" },
+          "Bucaramanga": { factor:0.83, junior:9, medio:17, senior:29, moneda:"USD" },
+          "Pereira": { factor:0.82, junior:9, medio:16, senior:28, moneda:"USD" },
+          "Manizales": { factor:0.81, junior:9, medio:16, senior:28, moneda:"USD" },
+          "Ibagué": { factor:0.80, junior:8, medio:15, senior:27, moneda:"USD" }
+        },
+        "Chile": {
+          "Santiago": { factor:1.05, junior:18, medio:30, senior:48, moneda:"USD" },
+          "Valparaíso": { factor:0.92, junior:15, medio:26, senior:42, moneda:"USD" },
+          "Concepción": { factor:0.90, junior:15, medio:25, senior:40, moneda:"USD" },
+          "La Serena": { factor:0.88, junior:14, medio:24, senior:38, moneda:"USD" },
+          "Antofagasta": { factor:0.93, junior:15, medio:26, senior:42, moneda:"USD" },
+          "Temuco": { factor:0.87, junior:14, medio:23, senior:37, moneda:"USD" },
+          "Rancagua": { factor:0.88, junior:14, medio:24, senior:38, moneda:"USD" },
+          "Arica": { factor:0.85, junior:13, medio:22, senior:36, moneda:"USD" },
+          "Iquique": { factor:0.90, junior:14, medio:25, senior:40, moneda:"USD" },
+          "Puerto Montt": { factor:0.86, junior:13, medio:23, senior:37, moneda:"USD" }
+        },
+        "Perú": {
+          "Lima": { factor:1.00, junior:15, medio:25, senior:40, moneda:"USD" },
+          "Arequipa": { factor:0.85, junior:12, medio:20, senior:33, moneda:"USD" },
+          "Trujillo": { factor:0.83, junior:11, medio:19, senior:32, moneda:"USD" },
+          "Chiclayo": { factor:0.80, junior:11, medio:18, senior:30, moneda:"USD" },
+          "Piura": { factor:0.79, junior:10, medio:17, senior:29, moneda:"USD" },
+          "Iquitos": { factor:0.77, junior:10, medio:16, senior:28, moneda:"USD" },
+          "Cusco": { factor:0.82, junior:11, medio:19, senior:31, moneda:"USD" },
+          "Chimbote": { factor:0.78, junior:10, medio:17, senior:28, moneda:"USD" },
+          "Huancayo": { factor:0.78, junior:10, medio:17, senior:28, moneda:"USD" },
+          "Tacna": { factor:0.80, junior:11, medio:18, senior:30, moneda:"USD" }
+        },
+        "Uruguay": {
+          "Montevideo": { factor:1.00, junior:15, medio:25, senior:40, moneda:"USD" },
+          "Salto": { factor:0.82, junior:12, medio:20, senior:33, moneda:"USD" },
+          "Paysandú": { factor:0.81, junior:11, medio:19, senior:32, moneda:"USD" },
+          "Rivera": { factor:0.79, junior:11, medio:18, senior:30, moneda:"USD" },
+          "Las Piedras": { factor:0.85, junior:12, medio:21, senior:34, moneda:"USD" },
+          "Maldonado": { factor:0.88, junior:13, medio:22, senior:36, moneda:"USD" },
+          "Tacuarembó": { factor:0.78, junior:11, medio:18, senior:29, moneda:"USD" },
+          "Melo": { factor:0.77, junior:10, medio:17, senior:28, moneda:"USD" },
+          "Mercedes": { factor:0.79, junior:11, medio:18, senior:30, moneda:"USD" },
+          "Artigas": { factor:0.76, junior:10, medio:16, senior:27, moneda:"USD" }
+        },
+        "Venezuela": {
+          "Caracas": { factor:1.00, junior:10, medio:18, senior:30, moneda:"USD" },
+          "Maracaibo": { factor:0.88, junior:8, medio:15, senior:25, moneda:"USD" },
+          "Valencia": { factor:0.87, junior:8, medio:15, senior:25, moneda:"USD" },
+          "Barquisimeto": { factor:0.85, junior:8, medio:14, senior:24, moneda:"USD" },
+          "Ciudad Guayana": { factor:0.83, junior:7, medio:13, senior:22, moneda:"USD" },
+          "Maturín": { factor:0.82, junior:7, medio:13, senior:22, moneda:"USD" },
+          "Barcelona": { factor:0.83, junior:7, medio:13, senior:22, moneda:"USD" },
+          "Cumaná": { factor:0.80, junior:7, medio:12, senior:20, moneda:"USD" },
+          "Mérida": { factor:0.82, junior:7, medio:13, senior:22, moneda:"USD" },
+          "Los Teques": { factor:0.85, junior:8, medio:14, senior:23, moneda:"USD" }
+        },
+        "Ecuador": {
+          "Quito": { factor:1.00, junior:12, medio:20, senior:33, moneda:"USD" },
+          "Guayaquil": { factor:0.95, junior:11, medio:19, senior:31, moneda:"USD" },
+          "Cuenca": { factor:0.88, junior:10, medio:17, senior:28, moneda:"USD" },
+          "Santo Domingo": { factor:0.83, junior:9, medio:15, senior:25, moneda:"USD" },
+          "Machala": { factor:0.82, junior:9, medio:15, senior:25, moneda:"USD" },
+          "Durán": { factor:0.85, junior:9, medio:16, senior:26, moneda:"USD" },
+          "Manta": { factor:0.83, junior:9, medio:15, senior:25, moneda:"USD" },
+          "Portoviejo": { factor:0.81, junior:8, medio:14, senior:24, moneda:"USD" },
+          "Loja": { factor:0.82, junior:9, medio:15, senior:25, moneda:"USD" },
+          "Ambato": { factor:0.83, junior:9, medio:15, senior:25, moneda:"USD" }
+        },
+        "Bolivia": {
+          "La Paz": { factor:1.00, junior:10, medio:17, senior:28, moneda:"USD" },
+          "Santa Cruz": { factor:0.95, junior:9, medio:16, senior:26, moneda:"USD" },
+          "Cochabamba": { factor:0.88, junior:8, medio:14, senior:23, moneda:"USD" },
+          "Sucre": { factor:0.83, junior:7, medio:12, senior:20, moneda:"USD" },
+          "Oruro": { factor:0.81, junior:7, medio:12, senior:19, moneda:"USD" },
+          "Potosí": { factor:0.79, junior:7, medio:11, senior:18, moneda:"USD" },
+          "Tarija": { factor:0.82, junior:7, medio:12, senior:20, moneda:"USD" },
+          "Sacaba": { factor:0.83, junior:7, medio:12, senior:20, moneda:"USD" },
+          "Quillacollo": { factor:0.82, junior:7, medio:12, senior:19, moneda:"USD" },
+          "Montero": { factor:0.81, junior:7, medio:11, senior:19, moneda:"USD" }
+        }
+      }
+    };
+
+    // ── Multiplicadores por profesión ──
+
+    const PROF_MULT = {
+      'Analista de Datos': 1.15,
+      'Animador 3D': 1.00,
+      'Arquitecto de Soluciones': 1.20,
+      'Asistente Virtual': 0.65,
+      'Coach / Mentor': 0.90,
+      'Community Manager': 0.80,
+      'Consultor CRM': 1.00,
+      'Consultor de Negocios': 1.10,
+      'Consultor SEO': 1.10,
+      'Copywriter': 0.75,
+      'Data Scientist': 1.40,
+      'Desarrollador Backend': 1.30,
+      'Desarrollador Frontend': 1.30,
+      'Desarrollador Mobile': 1.15,
+      'Desarrollador Shopify': 1.10,
+      'Desarrollador Web': 1.10,
+      'Desarrollador WordPress': 1.10,
+      'Desarrollador de Videojuegos': 1.00,
+      'Diseñador Gráfico': 1.00,
+      'Diseñador UX/UI': 1.25,
+      'Diseñador Web': 1.05,
+      'Editor de Video': 0.90,
+      'Especialista SEM': 1.10,
+      'Especialista en Ciberseguridad': 1.30,
+      'Especialista en Email Marketing': 0.90,
+      'Especialista en IA / Machine Learning': 1.40,
+      'Fotógrafo': 0.90,
+      'Growth Hacker': 1.10,
+      'Ilustrador': 0.90,
+      'Ingeniero DevOps': 1.35,
+      'Ingeniero de Software': 1.30,
+      'Locutor / Voice Over': 0.85,
+      'Marketing Digital': 1.00,
+      'Motion Graphics': 1.00,
+      'Product Manager': 1.10,
+      'Project Manager': 1.10,
+      'Redactor de Contenidos': 0.75,
+      'Social Media Manager': 0.85,
+      'Tester QA': 0.95,
+      'Traductor': 0.80
+    };
+
+    // ── Generar TARIFAS completo ──
+
+    const TARIFAS = {};
+    const baseEntry = TARIFAS_BASE['Diseñador Gráfico'];
+
+    Object.keys(PROF_MULT).forEach(prof => {
+      TARIFAS[prof] = {};
+      const mult = PROF_MULT[prof];
+      Object.keys(baseEntry).forEach(pais => {
+        TARIFAS[prof][pais] = {};
+        Object.keys(baseEntry[pais]).forEach(ciudad => {
+          const b = baseEntry[pais][ciudad];
+          TARIFAS[prof][pais][ciudad] = {
+            factor: b.factor,
+            junior: Math.round(b.junior * mult),
+            medio: Math.round(b.medio * mult),
+            senior: Math.round(b.senior * mult),
+            moneda: b.moneda
+          };
+        });
+      });
+    });
+
+    // ── Arrays auxiliares ──
+
+    const paises = Object.keys(TARIFAS['Diseñador Gráfico']).sort((a,b) => a.localeCompare(b,'es'));
+
+    const ciudadesPorPais = {};
+    paises.forEach(p => {
+      ciudadesPorPais[p] = Object.keys(TARIFAS['Diseñador Gráfico'][p]).sort((a,b) => a.localeCompare(b,'es'));
+    });
+
+    const profesiones = Object.keys(PROF_MULT).sort((a,b) => a.localeCompare(b,'es'));
+
+    const experienciaOpts = ['0-1 años','2-3 años','4-6 años','7+ años'];
+
+    const expLevel = {
+      '0-1 años': 'junior',
+      '2-3 años': 'medio',
+      '4-6 años': 'intermedio',
+      '7+ años': 'senior'
+    };
+
+    // ── Tax / deductions ──
+
+    const taxData = {
+      'España':  { irpf:0.19, socialSecurity:294, expenses:200, currency:'€' },
+      'México':  { irpf:0.17, socialSecurity:120, expenses:150, currency:'€' },
+      'Argentina': { irpf:0.18, socialSecurity:80, expenses:120, currency:'€' },
+      'Colombia': { irpf:0.15, socialSecurity:90, expenses:100, currency:'€' },
+      'Chile':   { irpf:0.16, socialSecurity:110, expenses:130, currency:'€' },
+      'Perú':    { irpf:0.14, socialSecurity:70, expenses:90, currency:'€' },
+      'Uruguay': { irpf:0.16, socialSecurity:100, expenses:110, currency:'€' },
+      'Venezuela': { irpf:0.10, socialSecurity:40, expenses:60, currency:'€' },
+      'Ecuador': { irpf:0.12, socialSecurity:55, expenses:70, currency:'€' },
+      'Bolivia': { irpf:0.10, socialSecurity:45, expenses:60, currency:'€' }
+    };
+
+    // ── Populate selects ──
+
+    const $pais = document.getElementById('pais');
+    paises.forEach(p => { const o = document.createElement('option'); o.value = p; o.textContent = p; $pais.appendChild(o); });
+
+    const $ciu = document.getElementById('ciudad');
+
+    $pais.addEventListener('change', function() {
+      const pais = this.value;
+      const list = ciudadesPorPais[pais] || [];
+      $ciu.innerHTML = '';
+      const ph = document.createElement('option');
+      ph.value = ''; ph.disabled = true; ph.selected = true; ph.textContent = 'Selecciona tu ciudad';
+      $ciu.appendChild(ph);
+      list.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; $ciu.appendChild(o); });
+      $ciu.disabled = false;
+      checkForm();
+    });
+
+    const $pro = document.getElementById('profesion');
+    profesiones.forEach(p => { const o = document.createElement('option'); o.value = p; o.textContent = p; $pro.appendChild(o); });
+
+    const $exp = document.getElementById('experiencia');
+    experienciaOpts.forEach(e => { const o = document.createElement('option'); o.value = e; o.textContent = e; $exp.appendChild(o); });
+
+    const $form = document.getElementById('rateForm');
+    const $btn = document.getElementById('submitBtn');
+
+    function checkForm() {
+      $btn.disabled = !($pais.value && $ciu.value && $pro.value && $exp.value);
+    }
+
+    [$pais, $ciu, $pro, $exp].forEach(el => el.addEventListener('change', checkForm));
+
+    // ── Rate lookup ──
+
+    function getCityData(profesion, pais, ciudad) {
+      const pData = TARIFAS[profesion];
+      if (!pData) return null;
+      const cData = pData[pais];
+      if (!cData) return null;
+      return cData[ciudad] || null;
+    }
+
+    function getRate(profesion, pais, ciudad, experiencia) {
+      const data = getCityData(profesion, pais, ciudad);
+      if (!data) return { rate: 0, moneda: '€' };
+
+      const level = expLevel[experiencia] || 'medio';
+      let rate;
+      if (level === 'junior') rate = data.junior;
+      else if (level === 'senior') rate = data.senior;
+      else if (level === 'intermedio') rate = Math.round((data.medio + data.senior) / 2);
+      else rate = data.medio;
+
+      return { rate, moneda: data.moneda };
+    }
+
+    function getAllProfRates(pais, ciudad, experiencia) {
+      const result = {};
+      Object.keys(TARIFAS).forEach(prof => {
+        result[prof] = getRate(prof, pais, ciudad, experiencia).rate;
+      });
+      return result;
+    }
+
+    function getAvgRate(pais, ciudad, experiencia) {
+      const rates = Object.values(getAllProfRates(pais, ciudad, experiencia));
+      return Math.round(rates.reduce((a,b) => a+b, 0) / rates.length);
+    }
+
+    function getVerdict(rate, avgRate) {
+      if (avgRate === 0) return { text:'Estás en la media', type:'mid', icon:'&#9888;' };
+      const r = rate / avgRate;
+      if (r >= 1.12) return { text:'Cobras bien', type:'good', icon:'&#9989;' };
+      if (r >= 0.88) return { text:'Estás en la media', type:'mid', icon:'&#9888;' };
+      return { text:'Cobras barato', type:'low', icon:'&#128683;' };
+    }
+
+    function getPercentile(profesion, pais, ciudad, experiencia) {
+      const allRates = getAllProfRates(pais, ciudad, experiencia);
+      const sorted = Object.values(allRates).sort((a,b) => a-b);
+      const myRate = allRates[profesion] || 0;
+      const idx = sorted.indexOf(myRate);
+      if (idx === -1 || sorted.length <= 1) return 50;
+      const pct = Math.round(((sorted.length - 1 - idx) / (sorted.length - 1)) * 100);
+      return Math.max(1, pct);
+    }
+
+    function calcNet(rate, pais) {
+      const monthly = rate * 160;
+      const tax = taxData[pais] || taxData['España'];
+      const irpfAmt = Math.round(monthly * tax.irpf);
+      const ssAmt = tax.socialSecurity;
+      const expAmt = tax.expenses;
+      const net = monthly - irpfAmt - ssAmt - expAmt;
+      return { monthly, irpfAmt, ssAmt, expAmt, net };
+    }
+
+    function formatNum(n) {
+      return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    // ── Premium content generators ──
+
+    function buildPercentileChart(profesion, pais, ciudad, experiencia) {
+      const allRates = getAllProfRates(pais, ciudad, experiencia);
+      const sorted = Object.values(allRates).sort((a,b) => a-b);
+      const max = sorted[sorted.length-1] || 1;
+      const p10 = sorted[Math.floor(sorted.length*0.1)] || 0;
+      const p25 = sorted[Math.floor(sorted.length*0.25)] || 0;
+      const p50 = sorted[Math.floor(sorted.length*0.5)] || 0;
+      const p75 = sorted[Math.floor(sorted.length*0.75)] || 0;
+      const p90 = sorted[Math.floor(sorted.length*0.9)] || 0;
+      const myRate = allRates[profesion] || 0;
+
+      const rows = [
+        { label:'P10', val:p10 },
+        { label:'P25', val:p25 },
+        { label:'P50', val:p50 },
+        { label:'P75', val:p75 },
+        { label:'P90', val:p90 },
+        { label:'Tú', val:myRate, highlight:true }
+      ];
+
+      let html = '';
+      rows.forEach(r => {
+        const w = Math.round((r.val / max) * 100);
+        const cls = r.highlight ? 'highlight' : '';
+        html += '<div class="percentile-row ' + cls + '">' +
+          '<span class="p-label">' + r.label + '</span>' +
+          '<div class="p-bar"><div class="p-fill" style="width:' + w + '%"></div></div>' +
+          '<span class="p-value">' + r.val + '€/h</span></div>';
+      });
+      return html;
+    }
+
+    function buildCityCompare(profesion, pais, experiencia, selectedCity) {
+      const cities = ciudadesPorPais[pais] || [];
+      const expM = expLevel[experiencia] || 'medio';
+
+      let data = cities.map(c => {
+        const r = getRate(profesion, pais, c, experiencia);
+        return { city: c, rate: r.rate };
+      });
+      data.sort((a,b) => b.rate - a.rate);
+      data = data.slice(0, 8);
+
+      const d = getRate(profesion, pais, selectedCity, experiencia);
+      const myRate = d.rate;
+
+      let html = '<table><tr><th>Ciudad</th><th>Tarifa estimada</th><th>vs. tu ciudad</th></tr>';
+      data.forEach(d => {
+        const cls = d.city === selectedCity ? 'highlight-row' : '';
+        const diff = myRate ? Math.round(((d.rate - myRate) / myRate) * 100) : 0;
+        const diffStr = diff === 0 ? '—' : (diff > 0 ? '+'+diff+'%' : diff+'%');
+        html += '<tr class="'+cls+'"><td>'+d.city+'</td><td>'+d.rate+'€/h</td><td>'+(d.city===selectedCity?'—':diffStr)+'</td></tr>';
+      });
+      html += '</table>';
+      return html;
+    }
+
+    function buildLatamCompare(profesion, pais, experiencia, ciudad) {
+      if (pais === 'España') return '<p style="font-size:13px;color:#64748b;">Esta sección aplica solo para Latinoamérica.</p>';
+
+      const local = getRate(profesion, pais, ciudad, experiencia);
+      const localRate = local.rate;
+
+      // USD export rate: use Diseñador Gráfico base rates in Spain (EUR) converted conceptually
+      const base = getRate(profesion, 'España', 'Madrid', experiencia);
+      const usdRate = Math.round(base.rate * 1.15);
+
+      return '<table><tr><th></th><th>Tarifa/h</th><th>Mensual (160h)</th></tr>' +
+        '<tr><td><strong>Local ('+pais+')</strong></td><td>'+localRate+'€</td><td>'+(localRate*160)+'€</td></tr>' +
+        '<tr class="highlight-row"><td><strong>Exportando (USD)</strong></td><td>'+usdRate+'€</td><td>'+(usdRate*160)+'€</td></tr>' +
+        '<tr><td><strong>Diferencia</strong></td><td style="color:#10b981;">+'+(usdRate-localRate)+'€/h</td><td style="color:#10b981;">+'+(usdRate*160 - localRate*160)+'€/mes</td></tr></table>';
+    }
+
+    function buildBudget(rate, pais) {
+      const monthlyGross = rate * 160;
+      const tax = taxData[pais] || taxData['España'];
+      const irpf = Math.round(monthlyGross * tax.irpf);
+      const ss = tax.socialSecurity;
+      const exp = tax.expenses;
+      const net = monthlyGross - irpf - ss - exp;
+      const savings = Math.round(net * 0.15);
+      const spending = net - savings;
+
+      return '<table>' +
+        '<tr class="section"><td colspan="2">&#128176; Ingresos</td></tr>' +
+        '<tr><td>Ingreso bruto mensual</td><td>'+formatNum(monthlyGross)+'€</td></tr>' +
+        '<tr><td>Tarifa por hora</td><td>'+rate+'€/h</td></tr>' +
+        '<tr class="section"><td colspan="2">&#128200; Gastos fijos</td></tr>' +
+        '<tr><td>IRPF / Impuesto a la renta</td><td>−'+formatNum(irpf)+'€</td></tr>' +
+        '<tr><td>Cuota de autónomos / SS</td><td>−'+formatNum(ss)+'€</td></tr>' +
+        '<tr><td>Gastos operativos</td><td>−'+formatNum(exp)+'€</td></tr>' +
+        '<tr class="total"><td>&#128176; Neto mensual</td><td>'+formatNum(net)+'€</td></tr>' +
+        '<tr><td>&#128176; Neto anual</td><td>'+formatNum(net*12)+'€</td></tr>' +
+        '<tr class="section"><td colspan="2">&#128178; Distribución recomendada</td></tr>' +
+        '<tr><td>Gastos personales</td><td>'+formatNum(spending)+'€</td></tr>' +
+        '<tr><td>Ahorro / Inversión</td><td>'+formatNum(savings)+'€</td></tr></table>';
+    }
+
+    // ── Form submit ──
+
+    $form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const profesion = $pro.value, ciudad = $ciu.value, experiencia = $exp.value, pais = $pais.value;
+      const { rate, moneda } = getRate(profesion, pais, ciudad, experiencia);
+      const avgRate = getAvgRate(pais, ciudad, experiencia);
+      const verdict = getVerdict(rate, avgRate);
+      const low = Math.round(rate * 0.85);
+      const high = Math.round(rate * 1.15);
+      const pct = getPercentile(profesion, pais, ciudad, experiencia);
+      const net = calcNet(rate, pais);
+
+      const sym = moneda === 'EUR' ? '€' : '$';
+
+      // Card
+      const iconMap = { good:'&#9989;', mid:'&#9888;', low:'&#128680;' };
+      document.getElementById('verdictIcon').innerHTML = iconMap[verdict.type] || '';
+      const badge = document.getElementById('resultBadge');
+      badge.className = 'result-badge ' + verdict.type;
+      badge.innerHTML = verdict.icon + ' ' + verdict.text;
+
+      document.getElementById('resultCard').className = 'result-card verdict-' + verdict.type;
+      document.getElementById('rateHour').textContent = rate;
+      document.getElementById('rateCurrH').textContent = sym;
+      document.getElementById('rateCurrD').textContent = sym;
+      document.getElementById('rateCurrM').textContent = sym;
+      document.getElementById('rateDay').textContent = formatNum(rate * 8);
+      document.getElementById('rateMonth').textContent = formatNum(rate * 160);
+      document.getElementById('resultRange').textContent = low + sym + '/h — ' + high + sym + '/h';
+
+      document.getElementById('topNumber').textContent = 'Top ' + pct + '%';
+      document.getElementById('topMessage').textContent = 'del mercado para tu perfil';
+
+      // Net salary
+      document.getElementById('netGross').textContent = formatNum(net.monthly) + '€';
+      document.getElementById('netTax').textContent = '−' + formatNum(net.irpfAmt) + '€';
+      document.getElementById('netSS').textContent = '−' + formatNum(net.ssAmt) + '€';
+      document.getElementById('netExpenses').textContent = '−' + formatNum(net.expAmt) + '€';
+      document.getElementById('netTotal').textContent = formatNum(net.net) + '€';
+
+      // Wrapped
+      document.getElementById('wrappedRate').textContent = rate + sym + '/h';
+      document.getElementById('wrappedRateSub').textContent = 'tarifa del mercado';
+      document.getElementById('wrappedTopValue').textContent = pct + '%';
+      document.getElementById('wrappedQuote').innerHTML =
+        '"Mi tarifa como <em>' + profesion + '</em> en <em>' + ciudad + '</em> está en el <span class="highlight">Top ' + pct + '%</span> del mercado. ¿Y la tuya?"';
+
+      // Show results
+      document.getElementById('resultWrap').classList.add('visible');
+      document.getElementById('resultWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      window._premiumData = { profesion, pais, ciudad, experiencia, rate };
+    });
+
+    // ── Social share ──
+
+    function getShareText() {
+      const rate = document.getElementById('rateHour').textContent;
+      const curr = document.getElementById('rateCurrH').textContent;
+      const badge = document.getElementById('resultBadge').textContent.trim();
+      const pct = document.getElementById('wrappedTopValue').textContent;
+      const prof = document.getElementById('wrappedQuote').innerHTML;
+      const m = prof.match(/<em>([^<]+)<\/em>/g);
+      const p = m ? m[0].replace(/<\/?em>/g,'') : '';
+      const c = m && m[1] ? m[1].replace(/<\/?em>/g,'') : '';
+      return 'Mi tarifa como ' + p + ' en ' + c + ' está en el Top ' + pct + ' del mercado. Descubre la tuya en CuantoCobrar';
+    }
+
+    document.getElementById('shareTwitter').addEventListener('click', function() {
+      const text = getShareText();
+      window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text + '\n\ncuantocobrar.com'), '_blank');
+    });
+
+    document.getElementById('shareLinkedin').addEventListener('click', function() {
+      const text = getShareText();
+      window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent('https://cuantocobrar.com') + '&text=' + encodeURIComponent(text), '_blank');
+    });
+
+    document.getElementById('shareWhatsapp').addEventListener('click', function() {
+      const text = getShareText();
+      window.open('https://wa.me/?text=' + encodeURIComponent(text + '\n\ncuantocobrar.com'), '_blank');
+    });
+
+    document.getElementById('shareCopy').addEventListener('click', function() {
+      const text = getShareText() + '\n\ncuantocobrar.com';
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('shareCopy');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '&#10003; Copiado';
+        setTimeout(() => btn.innerHTML = orig, 2000);
+      }).catch(() => {});
+    });
+
+    // ── Purchase ──
+
+    document.getElementById('purchaseBtn').addEventListener('click', function() {
+      document.getElementById('purchaseFeedback').classList.add('visible');
+      document.getElementById('premiumCard').classList.remove('locked');
+      document.getElementById('premiumCard').classList.add('unlocked');
+      document.getElementById('premiumContent').classList.add('visible');
+
+      const d = window._premiumData;
+      if (d) {
+        document.getElementById('percentileChart').innerHTML = buildPercentileChart(d.profesion, d.pais, d.ciudad, d.experiencia);
+        document.getElementById('cityCompare').innerHTML = buildCityCompare(d.profesion, d.pais, d.experiencia, d.ciudad);
+        document.getElementById('latamCompare').innerHTML = buildLatamCompare(d.profesion, d.pais, d.experiencia, d.ciudad);
+        document.getElementById('budgetTemplate').innerHTML = buildBudget(d.rate, d.pais);
+
+        document.getElementById('latamSection').style.display = d.pais === 'España' ? 'none' : 'block';
+      }
+
+      document.getElementById('premiumSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  </script>
+
+</body>
+</html>
