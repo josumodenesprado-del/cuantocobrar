@@ -59,9 +59,6 @@
     .hero-stat .icon { font-size: 28px; display: block; margin-bottom: 6px; }
     .hero-stat .text { font-size: 14px; font-weight: 600; color: #cbd5e1; line-height: 1.3; }
 
-    .hero-counter { margin-top: 28px; display: inline-flex; align-items: center; gap: 8px; background: rgba(0,200,83,0.08); border: 1px solid rgba(0,200,83,0.15); border-radius: 999px; padding: 10px 22px; font-size: 14px; color: #6EE7B7; font-weight: 600; }
-    .hero-counter .num { font-weight: 900; color: #00C853; font-size: 18px; min-width: 60px; text-align: center; }
-
     .scroll-arrow { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 4px; color: rgba(255,255,255,0.3); font-size: 12px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; z-index: 2; }
     .scroll-arrow svg { width: 24px; height: 24px; animation: bounceArrow 2s ease-in-out infinite; }
     @keyframes bounceArrow { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
@@ -377,8 +374,6 @@
       .hero-stat { min-width: 140px; padding: 14px 16px; }
       .hero-stat .icon { font-size: 22px; }
       .hero-stat .text { font-size: 12px; }
-      .hero-counter { font-size: 12px; padding: 8px 16px; }
-      .hero-counter .num { font-size: 15px; min-width: 40px; }
       .scroll-arrow { display: none; }
       .section { padding: 56px 16px; }
       .section-title { font-size: 24px; }
@@ -426,11 +421,7 @@
         <div class="hero-stat"><span class="icon">&#9889;</span><span class="text">Resultado en 10 segundos</span></div>
       </div>
 
-      <div class="hero-counter">
-        <span>&#128293;</span>
-        <span class="num" id="counterNum">1.247</span>
-        <span>freelancers ya consultaron su tarifa hoy</span>
-      </div>
+
     </div>
 
     <a class="scroll-arrow" href="#calculadora">
@@ -1249,19 +1240,7 @@
       document.getElementById('premiumSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
-    // ── Counter animation ──
 
-    (function animateCounter() {
-      const el = document.getElementById('counterNum');
-      const target = 1247;
-      let current = 0;
-      const step = Math.ceil(target / 60);
-      const interval = setInterval(() => {
-        current += step;
-        if (current >= target) { current = target; clearInterval(interval); }
-        el.textContent = current.toLocaleString('es');
-      }, 25);
-    })();
   </script>
 
 </body>
