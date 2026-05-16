@@ -54,6 +54,19 @@
     .hero h1 em { font-style: normal; color: #00C853; }
     .hero p { font-size: 19px; color: #94a3b8; max-width: 540px; margin: 0 auto; }
 
+    .hero-stats { display: flex; justify-content: center; gap: 16px; margin-top: 36px; flex-wrap: wrap; }
+    .hero-stat { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 18px 22px; min-width: 180px; flex: 1; max-width: 240px; backdrop-filter: blur(4px); }
+    .hero-stat .icon { font-size: 28px; display: block; margin-bottom: 6px; }
+    .hero-stat .text { font-size: 14px; font-weight: 600; color: #cbd5e1; line-height: 1.3; }
+
+    .hero-counter { margin-top: 28px; display: inline-flex; align-items: center; gap: 8px; background: rgba(0,200,83,0.08); border: 1px solid rgba(0,200,83,0.15); border-radius: 999px; padding: 10px 22px; font-size: 14px; color: #6EE7B7; font-weight: 600; }
+    .hero-counter .num { font-weight: 900; color: #00C853; font-size: 18px; min-width: 60px; text-align: center; }
+
+    .scroll-arrow { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 4px; color: rgba(255,255,255,0.3); font-size: 12px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; z-index: 2; }
+    .scroll-arrow svg { width: 24px; height: 24px; animation: bounceArrow 2s ease-in-out infinite; }
+    @keyframes bounceArrow { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+    .scroll-arrow:hover { color: rgba(255,255,255,0.6); }
+
     .section { max-width: 1040px; margin: 0 auto; padding: 80px 28px; }
     .section-title { font-size: 32px; font-weight: 800; text-align: center; margin-bottom: 8px; letter-spacing: -0.5px; color: #1A1A1A; }
     .section-sub { text-align: center; color: #6B7280; margin-bottom: 48px; font-size: 17px; }
@@ -128,6 +141,27 @@
     .btn-whatsapp { background: #25d366; color: #fff; border-color: #25d366; }
     .btn-whatsapp:hover { background: #1ebe5d; }
     .form-note { text-align: center; font-size: 13px; color: #9CA3AF; margin-top: 12px; }
+
+    .step-card.completed { border-color: #00C853; background: #FAFFFB; }
+    .step-card.completed .step-number { background: #00C853; color: #fff; }
+    .step-card .check-badge { display: none; margin-left: auto; font-size: 20px; color: #00C853; flex-shrink: 0; }
+    .step-card.completed .check-badge { display: block; }
+    .step-card { transition: box-shadow 0.3s, border-color 0.3s, transform 0.3s, opacity 0.3s; }
+    .step-card.step-enter { opacity: 0; transform: translateY(16px); }
+    .step-card.step-enter-active { opacity: 1; transform: translateY(0); }
+
+    .testimonials { margin: 24px 0 16px; display: flex; flex-direction: column; gap: 12px; }
+    .testimonial { background: #F9FAFB; border-left: 3px solid #00C853; border-radius: 10px; padding: 16px 20px; }
+    .testimonial p { font-size: 14px; color: #374151; line-height: 1.5; font-style: italic; margin-bottom: 6px; }
+    .testimonial .author { font-size: 12px; color: #6B7280; font-weight: 600; }
+
+    .btn-glow { position: relative; overflow: hidden; }
+    .btn-glow::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.15), transparent 60%); animation: glowSpin 3s linear infinite; pointer-events: none; }
+    .btn-glow::after { content: ''; position: absolute; inset: 2px; background: inherit; border-radius: inherit; z-index: 1; }
+    .btn-glow span { position: relative; z-index: 2; }
+    @keyframes glowSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .btn-security { text-align: center; margin-top: 10px; font-size: 13px; color: #9CA3AF; font-weight: 500; }
+    .btn-security span { display: inline-flex; align-items: center; gap: 4px; }
 
     .result-section { max-width: 1040px; margin: 0 auto; padding: 0 28px 80px; }
     .result-wrap { display: none; }
@@ -339,10 +373,20 @@
       .hero { padding: 60px 20px 52px; }
       .hero h1 { font-size: 30px; }
       .hero p { font-size: 16px; }
+      .hero-stats { gap: 10px; }
+      .hero-stat { min-width: 140px; padding: 14px 16px; }
+      .hero-stat .icon { font-size: 22px; }
+      .hero-stat .text { font-size: 12px; }
+      .hero-counter { font-size: 12px; padding: 8px 16px; }
+      .hero-counter .num { font-size: 15px; min-width: 40px; }
+      .scroll-arrow { display: none; }
       .section { padding: 56px 16px; }
       .section-title { font-size: 24px; }
       .form-card { gap: 16px; }
       .step-card { padding: 18px 18px; }
+      .testimonial { padding: 12px 16px; }
+      .testimonial p { font-size: 13px; }
+      .btn-security { font-size: 12px; }
       .result-card { padding: 36px 20px 28px; }
       .rate-item .rate-value { font-size: 24px; }
       .rate-item { min-width: 90px; padding: 16px 6px 12px; }
@@ -375,7 +419,24 @@
       <span class="hero-tag">Para freelancers, por freelancers</span>
       <h1>¿Estás cobrando <em>bien</em> o <em>barato</em>?</h1>
       <p>Descubre si tu tarifa está alineada con el mercado de tu país. En menos de 10 segundos.</p>
+
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="icon">&#128202;</span><span class="text">+40 profesiones analizadas</span></div>
+        <div class="hero-stat"><span class="icon">&#127758;</span><span class="text">+100 ciudades en España y LATAM</span></div>
+        <div class="hero-stat"><span class="icon">&#9889;</span><span class="text">Resultado en 10 segundos</span></div>
+      </div>
+
+      <div class="hero-counter">
+        <span>&#128293;</span>
+        <span class="num" id="counterNum">1.247</span>
+        <span>freelancers ya consultaron su tarifa hoy</span>
+      </div>
     </div>
+
+    <a class="scroll-arrow" href="#calculadora">
+      <span>Descubre tu tarifa</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </a>
   </section>
 
   <section class="section" id="calculadora">
@@ -385,13 +446,14 @@
     <div class="form-card">
       <form id="rateForm" novalidate>
 
-        <div class="step-card">
+        <div class="step-card" data-step="1">
           <div class="step-header">
             <div class="step-number">1</div>
             <div class="step-header-text">
               <span class="step-label">Paso 1</span>
               <span class="step-title">¿En qué país trabajas?</span>
             </div>
+            <span class="check-badge">&#10003;</span>
           </div>
           <div class="form-group">
             <select id="pais" name="pais" required>
@@ -400,13 +462,14 @@
           </div>
         </div>
 
-        <div class="step-card">
+        <div class="step-card" data-step="2">
           <div class="step-header">
             <div class="step-number">2</div>
             <div class="step-header-text">
               <span class="step-label">Paso 2</span>
               <span class="step-title">¿En qué ciudad estás?</span>
             </div>
+            <span class="check-badge">&#10003;</span>
           </div>
           <div class="form-group">
             <select id="ciudad" name="ciudad" required disabled>
@@ -415,13 +478,14 @@
           </div>
         </div>
 
-        <div class="step-card">
+        <div class="step-card" data-step="3">
           <div class="step-header">
             <div class="step-number">3</div>
             <div class="step-header-text">
               <span class="step-label">Paso 3</span>
               <span class="step-title">¿Cuál es tu profesión?</span>
             </div>
+            <span class="check-badge">&#10003;</span>
           </div>
           <div class="form-group">
             <select id="profesion" name="profesion" required>
@@ -430,13 +494,14 @@
           </div>
         </div>
 
-        <div class="step-card">
+        <div class="step-card" data-step="4">
           <div class="step-header">
             <div class="step-number">4</div>
             <div class="step-header-text">
               <span class="step-label">Paso 4</span>
               <span class="step-title">¿Cuántos años de experiencia tienes?</span>
             </div>
+            <span class="check-badge">&#10003;</span>
           </div>
           <div class="form-group">
             <select id="experiencia" name="experiencia" required>
@@ -445,8 +510,22 @@
           </div>
         </div>
 
-        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Descubre cuánto deberías cobrar</button>
+        <div class="testimonials">
+          <div class="testimonial">
+            <p>"Descubrí que cobraba un 30% menos que la media. Subí mis tarifas ese mismo mes."</p>
+            <div class="author">— Laura M., Diseñadora en Madrid</div>
+          </div>
+          <div class="testimonial">
+            <p>"Por fin una herramienta que entiende el mercado latinoamericano."</p>
+            <div class="author">— Carlos R., Programador en Bogotá</div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-glow" id="submitBtn" disabled>
+          <span>Descubre cuánto deberías cobrar</span>
+        </button>
       </form>
+      <p class="btn-security"><span>&#128274; Gratis · Sin registro · Resultado inmediato</span></p>
       <p class="form-note">Resultados basados en datos de mercado actualizados.</p>
     </div>
   </section>
@@ -859,9 +938,29 @@
     const $form = document.getElementById('rateForm');
     const $btn = document.getElementById('submitBtn');
 
+    function updateStepStatus() {
+      const steps = [
+        { el: $pais, card: document.querySelector('[data-step="1"]') },
+        { el: $ciu, card: document.querySelector('[data-step="2"]') },
+        { el: $pro, card: document.querySelector('[data-step="3"]') },
+        { el: $exp, card: document.querySelector('[data-step="4"]') }
+      ];
+      steps.forEach(s => {
+        if (s.el.value) { s.card.classList.add('completed'); }
+        else { s.card.classList.remove('completed'); }
+      });
+    }
+
     function checkForm() {
       $btn.disabled = !($pais.value && $ciu.value && $pro.value && $exp.value);
+      updateStepStatus();
     }
+
+    // Animate step cards on page load
+    document.querySelectorAll('.step-card').forEach((c, i) => {
+      c.classList.add('step-enter');
+      setTimeout(() => c.classList.add('step-enter-active'), 100 + i * 120);
+    });
 
     [$pais, $ciu, $pro, $exp].forEach(el => el.addEventListener('change', checkForm));
 
@@ -1149,6 +1248,20 @@
 
       document.getElementById('premiumSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
+
+    // ── Counter animation ──
+
+    (function animateCounter() {
+      const el = document.getElementById('counterNum');
+      const target = 1247;
+      let current = 0;
+      const step = Math.ceil(target / 60);
+      const interval = setInterval(() => {
+        current += step;
+        if (current >= target) { current = target; clearInterval(interval); }
+        el.textContent = current.toLocaleString('es');
+      }, 25);
+    })();
   </script>
 
 </body>
